@@ -1,0 +1,58 @@
+<?php
+/** @var AutoReadableContentExtension $this */
+$threshold = $this->getUserConfigurationValue('threshold', 200);
+$timeout = $this->getUserConfigurationValue('timeout', 15);
+?>
+
+<div class="post">
+  <h2>Auto Readable Content</h2>
+  <p>Automatically fetches and extracts readable article content for feeds that provide empty or minimal content (e.g. Hacker News, Lobsters).</p>
+
+  <form action="<?= _url('extension', 'configure', 'e', urlencode($this->getName())) ?>" method="post">
+    <input type="hidden" name="_csrf" value="<?= FreshRSS_Auth::csrfToken() ?>" />
+
+    <fieldset>
+      <legend>Settings</legend>
+
+      <div class="form-group">
+        <label for="threshold">Content threshold (characters):</label>
+        <input type="number" name="threshold" id="threshold" value="<?= (int)$threshold ?>" min="0" max="5000" />
+        <p class="help">Articles with fewer characters of text content than this will trigger auto-fetch. Default: 200. Set to 0 to fetch for all articles.</p>
+      </div>
+
+      <div class="form-group">
+        <label for="timeout">Fetch timeout (seconds):</label>
+        <input type="number" name="timeout" id="timeout" value="<?= (int)$timeout ?>" min="5" max="60" />
+        <p class="help">Maximum time to wait when fetching an article page. Default: 15.</p>
+      </div>
+    </fieldset>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-important">Save</button>
+    </div>
+  </form>
+
+  <div class="alert alert-info">
+    <h3>How it works</h3>
+    <ul>
+      <li>During feed refresh, each new article's content length is checked against the threshold.</li>
+      <li>If below the threshold, the extension fetches the linked page and extracts the main content.</li>
+      <li>The extracted content replaces the empty feed content and is saved to the database.</li>
+      <li>Works with any feed — no per-feed CSS selectors needed.</li>
+      <li>The original feed content (if any) is preserved in a collapsible section.</li>
+    </ul>
+    <p><strong>Note:</strong> Feed refresh will be slower as each article requires an HTTP fetch. This is normal.</p>
+  </div>
+</div>
+
+<style>
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; font-weight: bold; margin-bottom: 0.25rem; }
+.form-group input { padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px; width: 120px; }
+.form-group .help { color: #666; font-size: 0.85em; margin-top: 0.25rem; }
+fieldset { border: 1px solid #ddd; border-radius: 4px; padding: 1rem; margin-bottom: 1rem; }
+legend { font-weight: bold; padding: 0 0.5rem; }
+.alert-info { background: #e7f3ff; border: 1px solid #b3d9ff; color: #0066cc; padding: 1rem; border-radius: 4px; margin-top: 1rem; }
+.btn-important { background: #007cba; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+.btn-important:hover { background: #005a87; }
+</style>
