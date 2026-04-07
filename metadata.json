@@ -1,0 +1,8 @@
+{
+  "name": "AutoReadableContent",
+  "author": "FreshRSS User",
+  "description": "Automatically fetches and extracts readable article content for feeds with empty or minimal content (e.g. Hacker News, Lobsters).",
+  "version": "0.1.0",
+  "entrypoint": "AutoReadableContent",
+  "type": "user"
+}
