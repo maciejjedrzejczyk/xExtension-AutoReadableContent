@@ -45,14 +45,14 @@ class AutoReadableContentExtension extends Minz_Extension
       $stripped = $content;
     }
 
-    $newOriginal = '<div class="auto-readable-content">' . $extracted . '</div>'
-      . ($stripped !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $stripped . '</details>' : '');
+    $newOriginal = ($stripped !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $stripped . '</details>' : '')
+      . '<div class="auto-readable-content">' . $extracted . '</div>';
 
     $entry->_content($prefix . $newOriginal);
 
     // Persist the extracted content (without other extensions' display-time prefix) to DB
-    $dbContent = '<div class="auto-readable-content">' . $extracted . '</div>'
-      . ($stripped !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $stripped . '</details>' : '');
+    $dbContent = ($stripped !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $stripped . '</details>' : '')
+      . '<div class="auto-readable-content">' . $extracted . '</div>';
     try {
       $dao = FreshRSS_Factory::createEntryDao();
       // Build a minimal entry array for updateEntry by cloning current entry with DB content
@@ -92,8 +92,8 @@ class AutoReadableContentExtension extends Minz_Extension
 
     $originalContent = $entry->content(false);
     $entry->_content(
-      '<div class="auto-readable-content">' . $extracted . '</div>'
-      . ($originalContent !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $originalContent . '</details>' : '')
+      ($originalContent !== '' ? '<details class="auto-readable-original"><summary>Original feed content</summary>' . $originalContent . '</details>' : '')
+      . '<div class="auto-readable-content">' . $extracted . '</div>'
     );
 
     return $entry;
